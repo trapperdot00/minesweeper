@@ -1,4 +1,4 @@
-#include "board.h"
+#include "minesweeper.h"
 
 #include <string>
 #include <stdexcept>
@@ -7,7 +7,7 @@
 
 struct usage_error : std::exception {
 	usage_error(const std::string& program) :
-		err{"usage: " + program + " <width> <height>"}
+		err{"usage: " + program + " <width> <height> <mines>"}
 	{}
 	const char* what() const noexcept {
 		return err.c_str();
@@ -16,44 +16,22 @@ struct usage_error : std::exception {
 };
 
 int main(int argc, char* argv[]) try {
-	if (argc != 3) {
+	if (argc != 4) {
 		throw usage_error{argv[0]};
 	}
 	size_t width;
 	size_t height;
+	size_t mines;
 	try {
 		width = std::stoull(argv[1]);
 		height = std::stoull(argv[2]);
+		mines = std::stoull(argv[3]);
 	} catch (...) {
 		throw usage_error{argv[0]};
 	}
-	board b{width, height};
-
-	char action;
-	point p;
-	while (std::cin >> action >> p) {
-		switch (action) {
-		case 'p':
-			b.put_mine(p);
-			break;
-		case 'e':
-			b.erase_mine(p);
-			break;
-		}
-		//b.debug_print();
-		std::cout << "Neighbors:\n";
-		for (size_t y = 0; y < b.height(); ++y) {
-			for (size_t x = 0; x < b.width(); ++x) {
-				if (b.has_mine(point{x, y})) {
-					std::cout << '*';
-				} else {
-					std::cout << b.neighboring_mines(point{x, y});
-				}
-			}
-			std::cout << "\n";
-		}
-		std::cout << "\n----------------------------\n\n";
-	}
+	minesweeper ms{width, height, mines};
+	board& b = ms.get();
+	b.debug_print();
 } catch (const std::exception& e) {
 	std::cerr << e.what() << '\n';
 }
