@@ -1,6 +1,7 @@
 #ifndef BOARD_H
 #define BOARD_H
 
+#include "point.h"
 #include "field.h"
 
 #include <cstddef>
@@ -10,10 +11,22 @@ class board {
 public:
 	board(size_t width, size_t height);
 
-	bool has_mine(size_t x, size_t y) const;
+	void put_mine(point);
+	void erase_mine(point);
+
+	bool has_mine(point) const;
+	size_t width() const;
+	size_t height() const;
 
 	void debug_print() const;
 private:
+	void set_field(point, field);
+
+	bool is_in_range(point) const;
+	void throw_if_not_in_range(point) const;
+
+	size_t width_;
+	size_t height_;
 	std::vector<std::vector<field>> data;
 };
 

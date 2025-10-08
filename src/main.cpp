@@ -28,7 +28,21 @@ int main(int argc, char* argv[]) try {
 		throw usage_error{argv[0]};
 	}
 	board b{width, height};
-	b.debug_print();
+
+	char action;
+	size_t x;
+	size_t y;
+	while (std::cin >> action >> x >> y) {
+		switch (action) {
+		case 'p':
+			b.put_mine(point{x, y});
+			break;
+		case 'e':
+			b.erase_mine(point{x, y});
+			break;
+		}
+		b.debug_print();
+	}
 } catch (const std::exception& e) {
 	std::cerr << e.what() << '\n';
 }
