@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <iostream>
+#include <algorithm>
 
 board::board(size_t width, size_t height) :
 	width_{width},
@@ -28,21 +29,16 @@ bool board::has_mine(point p) const {
 int board::neighboring_mines(point p) const {
 	throw_if_not_in_range(p);
 	int result = 0;	
-	for (size_t y = p.y + 1; y >= p.y - 1; --y) {
-		for (size_t x = p.x + 1; x >= p.x - 1; --x) {
-			if (x == p.x && y == p.y) {
-				continue;
-			}
-			point p{x, y};
-			if (is_in_range(p) && has_mine(p)) {
+	const size_t start_y = std::min(p.y - 1, p.y);
+	const size_t end_y = std::min(p.y + 1, height_ - 1);
+	for (size_t y = start_y; y <= end_y; ++y) {
+		const size_t start_x = std::min(p.x - 1, p.x);
+		const size_t end_x = std::min(p.x + 1, width_ - 1);
+		for (size_t x = start_x; x <= end_x; ++x) {
+			point neighbor{x, y};
+			if (neighbor != p && has_mine(neighbor)) {
 				++result;
 			}
-			if (x == 0) {
-				break;
-			}
-		}
-		if (y == 0) {
-			break;
 		}
 	}
 	return result;

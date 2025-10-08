@@ -9,6 +9,9 @@ struct point {
 	size_t y;
 };
 
+bool operator==(const point&, const point&);
+bool operator!=(const point&, const point&);
+
 std::istream& operator>>(std::istream&, point&);
 std::ostream& operator<<(std::ostream&, const point&);
 

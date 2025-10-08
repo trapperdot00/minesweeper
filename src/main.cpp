@@ -39,10 +39,20 @@ int main(int argc, char* argv[]) try {
 		case 'e':
 			b.erase_mine(p);
 			break;
-		case 'n':
-			std::cout << "neighbors: " << b.neighboring_mines(p) << '\n';
 		}
-		b.debug_print();
+		//b.debug_print();
+		std::cout << "Neighbors:\n";
+		for (size_t y = 0; y < b.height(); ++y) {
+			for (size_t x = 0; x < b.width(); ++x) {
+				if (b.has_mine(point{x, y})) {
+					std::cout << '*';
+				} else {
+					std::cout << b.neighboring_mines(point{x, y});
+				}
+			}
+			std::cout << "\n";
+		}
+		std::cout << "\n----------------------------\n\n";
 	}
 } catch (const std::exception& e) {
 	std::cerr << e.what() << '\n';
