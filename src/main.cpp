@@ -30,15 +30,14 @@ int main(int argc, char* argv[]) try {
 	board b{width, height};
 
 	char action;
-	size_t x;
-	size_t y;
-	while (std::cin >> action >> x >> y) {
+	point p;
+	while (std::cin >> action >> p) {
 		switch (action) {
 		case 'p':
-			b.put_mine(point{x, y});
+			b.put_mine(p);
 			break;
 		case 'e':
-			b.erase_mine(point{x, y});
+			b.erase_mine(p);
 			break;
 		}
 		b.debug_print();
