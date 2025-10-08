@@ -15,12 +15,15 @@ public:
 	void erase_mine(point);
 
 	bool has_mine(point) const;
+	int neighboring_mines(point) const;
+
 	size_t width() const;
 	size_t height() const;
 
 	void debug_print() const;
 private:
 	void set_field(point, field);
+	field get_field(point) const;
 
 	bool is_in_range(point) const;
 	void throw_if_not_in_range(point) const;

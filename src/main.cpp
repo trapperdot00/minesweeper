@@ -39,6 +39,8 @@ int main(int argc, char* argv[]) try {
 		case 'e':
 			b.erase_mine(p);
 			break;
+		case 'n':
+			std::cout << "neighbors: " << b.neighboring_mines(p) << '\n';
 		}
 		b.debug_print();
 	}

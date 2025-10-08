@@ -22,7 +22,30 @@ void board::erase_mine(point p) {
 }
 
 bool board::has_mine(point p) const {
-	return data[p.y][p.x] == field::mine;
+	return get_field(p) == field::mine;
+}
+
+int board::neighboring_mines(point p) const {
+	throw_if_not_in_range(p);
+	int result = 0;	
+	for (size_t y = p.y + 1; y >= p.y - 1; --y) {
+		for (size_t x = p.x + 1; x >= p.x - 1; --x) {
+			if (x == p.x && y == p.y) {
+				continue;
+			}
+			point p{x, y};
+			if (is_in_range(p) && has_mine(p)) {
+				++result;
+			}
+			if (x == 0) {
+				break;
+			}
+		}
+		if (y == 0) {
+			break;
+		}
+	}
+	return result;
 }
 
 size_t board::width() const {
@@ -55,4 +78,9 @@ void board::throw_if_not_in_range(point p) const {
 void board::set_field(point p, field f) {
 	throw_if_not_in_range(p);
 	data[p.y][p.x] = f;
+}
+
+field board::get_field(point p) const {
+	throw_if_not_in_range(p);
+	return data[p.y][p.x];
 }
