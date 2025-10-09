@@ -7,6 +7,7 @@
 #include <chrono>
 #include <cctype>
 #include <iostream>
+#include <iomanip>
 
 minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 	mb{width, height},
@@ -46,25 +47,53 @@ void minesweeper::put_mines(size_t count) {
 }
 
 void minesweeper::print_board() const {
-	std::cout << "\npos: " << cur.pos() << '\n';
-	for (size_t y = 0; y < mb.height(); ++y) {
-		for (size_t x = 0; x < mb.width(); ++x) {
-			point p{x, y};
-			visual_tile vt = vb.get_tile(p);
-			std::cout << (cur.pos() == p ? '>' : ' ');
-			if (vt.state == visual_tile::clicked) {
-				if (mb.has_mine(p)) {
-					std::cout << '*';
-				} else {
-					std::cout << vt.neighbor_count;
-				}
-			} else {
-				std::cout << ' ';
-			}
-		}
-		std::cout << '\n';
+	print_cursor_position();
+	print_header();
+	for (size_t row = 0; row < mb.height(); ++row) {
+		print_board_row(row);
 	}
-	std::cout << "----------------------\n\n";
+	print_footer();
+}
+
+void minesweeper::print_header() const {
+	size_t footer_width = 2 * mb.width() + 3;
+	std::cout << std::setfill('-') << std::setw(footer_width) << '\n';
+}
+
+void minesweeper::print_cursor_position() const {
+	std::cout << "pos: " << cur.pos() << '\n';
+}
+
+void minesweeper::print_board_row(size_t row) const {
+	std::cout << '|';
+	for (size_t column = 0; column < mb.width(); ++column) {
+		point p{column, row};
+		print_tile_separator(p);
+		print_tile(p);
+	}
+	std::cout << '|';
+	std::cout << '\n';
+}
+
+void minesweeper::print_tile_separator(point p) const {
+	std::cout << (cur.pos() == p ? '>' : ' ');
+}
+
+void minesweeper::print_tile(point p) const {
+	visual_tile vt = vb.get_tile(p);
+	if (vt.state == visual_tile::clicked) {
+		if (mb.has_mine(p)) {
+			std::cout << '*';
+		} else {
+			std::cout << vt.neighbor_count;
+		}
+	} else {
+		std::cout << ' ';
+	}
+}
+
+void minesweeper::print_footer() const {
+	print_header();
 }
 
 void minesweeper::control_cursor(char ch) {
