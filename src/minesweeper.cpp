@@ -28,7 +28,7 @@ minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 
 void minesweeper::play() {
 	print_board();
-	for (char ch; !game_over() && std::cin >> ch; ) {
+	for (char ch; !game_over() && std::cin.get(ch); ) {
 		control_cursor(ch);
 		print_board();
 	}
@@ -57,19 +57,19 @@ void minesweeper::put_mines(size_t count) {
 
 void minesweeper::control_cursor(char ch) {
 	switch (std::tolower(ch)) {
-	case 'u':
+	case 'w':
 		cur.move(cursor::up);
 		break;
-	case 'd':
+	case 's':
 		cur.move(cursor::down);
 		break;
-	case 'r':
+	case 'd':
 		cur.move(cursor::right);
 		break;
-	case 'l':
+	case 'a':
 		cur.move(cursor::left);
 		break;
-	case 'x':
+	case ' ': case 'x':
 		cur.click();
 		break;
 	case 'f':
