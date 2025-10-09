@@ -6,6 +6,7 @@
 #include <random>
 #include <chrono>
 #include <cctype>
+#include <iostream>
 
 minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 	mb{width, height},
@@ -22,7 +23,9 @@ minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 
 void minesweeper::play() {
 	mb.debug_print();
-	vb.debug_print();
+	std::cout << "pos: " << pos.pos() << '\n';
+	print();
+	std::cout << "----------------------\n\n";
 	for (char ch; std::cin >> ch; ) {
 		cursor::direction dir;
 		switch (std::tolower(ch)) {
@@ -43,7 +46,9 @@ void minesweeper::play() {
 			break;
 		}
 		mb.debug_print();
-		vb.debug_print();
+		std::cout << "\npos: " << pos.pos() << '\n';
+		print();
+		std::cout << "----------------------\n\n";
 	}
 }
 
@@ -65,4 +70,24 @@ void minesweeper::put_mines(size_t count) {
 
 void minesweeper::click(point p) {
 	vb.click(p);
+}
+
+void minesweeper::print() const {
+	for (size_t y = 0; y < mb.height(); ++y) {
+		for (size_t x = 0; x < mb.width(); ++x) {
+			point p{x, y};
+			visual_tile vt = vb.get_tile(p);
+			std::cout << (pos.pos() == p ? '>' : ' ');
+			if (vt.state == visual_tile::clicked) {
+				if (mb.has_mine(p)) {
+					std::cout << '*';
+				} else {
+					std::cout << vt.neighbor_count;
+				}
+			} else {
+				std::cout << ' ';
+			}
+		}
+		std::cout << '\n';
+	}
 }
