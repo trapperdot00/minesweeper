@@ -4,7 +4,8 @@
 struct visual_tile {
 	enum {
 		clickable,
-		clicked
+		clicked,
+		flagged
 	} state = clickable;
 	int neighbor_count = 0;
 };

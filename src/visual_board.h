@@ -13,7 +13,9 @@ public:
 	explicit visual_board(const mine_board& mb);
 
 	void update_neighbor_counts();
+
 	void click(point);
+	void toggle_flag(point);
 private:
 	const mine_board& mb_;
 };

@@ -1,11 +1,13 @@
 #include "cursor.h"
 
 cursor::cursor(point start, size_t width, size_t height,
-		std::function<void (point)> callback) :
+		std::function<void (point)> cb,
+		std::function<void (point)> alt_cb) :
 	pos_{start},
 	width_{width},
 	height_{height},
-	click_event{callback}
+	click_event{cb},
+	alt_click_event{alt_cb}
 {}
 
 void cursor::move(direction d) {
@@ -27,6 +29,10 @@ void cursor::move(direction d) {
 
 void cursor::click() {
 	click_event(pos_);
+}
+
+void cursor::alt_click() {
+	alt_click_event(pos_);
 }
 
 point cursor::pos() const {

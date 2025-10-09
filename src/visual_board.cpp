@@ -22,6 +22,23 @@ void visual_board::update_neighbor_counts() {
 
 void visual_board::click(point p) {
 	visual_tile vt = get_tile(p);
-	vt.state = visual_tile::clicked;
+	if (vt.state == visual_tile::clickable) {
+		vt.state = visual_tile::clicked;
+		set_tile(p, vt);
+	}
+}
+
+void visual_board::toggle_flag(point p) {
+	visual_tile vt = get_tile(p);
+	switch (vt.state) {
+	case visual_tile::clickable:
+		vt.state = visual_tile::flagged;
+		break;
+	case visual_tile::flagged:
+		vt.state = visual_tile::clickable;
+		break;
+	default:
+		break;
+	}
 	set_tile(p, vt);
 }

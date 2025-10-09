@@ -12,9 +12,10 @@
 minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 	mb{width, height},
 	vb{mb},
-	cur{point{width / 2, height / 2}, width, height, [this](point p) {
-		vb.click(p);
-	}}
+	cur{point{width / 2, height / 2}, width, height,
+		[this](point p) { vb.click(p); },
+		[this](point p) { vb.toggle_flag(p); }
+	}
 {
 	if (width * height <= mine_count) {
 		throw std::invalid_argument{"no space for mines, game requires at least one empty field"};
@@ -81,13 +82,18 @@ void minesweeper::print_tile_separator(point p) const {
 
 void minesweeper::print_tile(point p) const {
 	visual_tile vt = vb.get_tile(p);
-	if (vt.state == visual_tile::clicked) {
+	switch (vt.state) {
+	case visual_tile::clicked:
 		if (mb.has_mine(p)) {
 			std::cout << '*';
 		} else {
 			std::cout << vt.neighbor_count;
 		}
-	} else {
+		break;
+	case visual_tile::flagged:
+		std::cout << 'P';
+		break;
+	default:
 		std::cout << ' ';
 	}
 }
@@ -112,6 +118,9 @@ void minesweeper::control_cursor(char ch) {
 		break;
 	case 'x':
 		cur.click();
+		break;
+	case 'f':
+		cur.alt_click();
 		break;
 	}
 }

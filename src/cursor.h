@@ -9,7 +9,8 @@
 class cursor {
 public:
 	cursor(point start, size_t width, size_t height,
-			std::function<void (point)> callback);
+			std::function<void (point)> cb,
+			std::function<void (point)> alt_cb);
 
 	enum direction {
 		up,
@@ -20,6 +21,7 @@ public:
 
 	void move(direction);
 	void click();
+	void alt_click();
 
 	point pos() const;
 	size_t width() const;
@@ -29,6 +31,7 @@ private:
 	size_t width_;
 	size_t height_;
 	std::function<void (point)> click_event;
+	std::function<void (point)> alt_click_event;
 };
 
 #endif
