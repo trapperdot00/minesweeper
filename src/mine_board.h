@@ -4,6 +4,8 @@
 #include "board.h"
 #include "mine_tile.h"
 
+#include <cstddef>
+
 class mine_board : public board<mine_tile> {
 public:
 	mine_board(size_t width, size_t height);

@@ -16,10 +16,10 @@ public:
 	size_t size() const;
 	size_t width() const;
 	size_t height() const;
-protected:
+
 	bool set_tile(point, tile);
 	tile get_tile(point) const;
-
+protected:
 	bool is_in_range(point) const;
 	void throw_if_not_in_range(point) const;
 private:
