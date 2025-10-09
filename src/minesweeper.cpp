@@ -86,15 +86,20 @@ void minesweeper::print_tile(point p) const {
 	case visual_tile::clicked:
 		if (mb.has_mine(p)) {
 			std::cout << '*';
-		} else {
+		} else if (vt.neighbor_count) {
 			std::cout << vt.neighbor_count;
+		} else {
+			std::cout << ' ';
 		}
 		break;
 	case visual_tile::flagged:
 		std::cout << 'P';
 		break;
+	case visual_tile::clickable:
+		std::cout << '#';
+		break;
 	default:
-		std::cout << ' ';
+		break;
 	}
 }
 

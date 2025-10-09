@@ -11,8 +11,6 @@
 template <typename tile>
 class board {
 public:
-	board(size_t width, size_t height, tile init);
-
 	size_t size() const;
 	size_t width() const;
 	size_t height() const;
@@ -20,6 +18,8 @@ public:
 	bool set_tile(point, tile);
 	tile get_tile(point) const;
 protected:
+	board(size_t width, size_t height, tile init);
+
 	bool is_in_range(point) const;
 	void throw_if_not_in_range(point) const;
 private:
