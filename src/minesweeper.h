@@ -15,6 +15,10 @@ public:
 	void play();
 private:
 	void put_mines(size_t count);
+
+	void control_cursor(char);
+	void click(point);
+	void toggle_flag(point);
 	
 	void print_board() const;
 	void print_header() const;
@@ -24,11 +28,10 @@ private:
 	void print_tile(point) const;
 	void print_footer() const;
 
-	void control_cursor(char);
-
 	mine_board mb;
 	visual_board vb;
 	cursor cur;
+	bool game_over_ = false;
 };
 
 #endif

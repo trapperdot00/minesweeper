@@ -13,8 +13,8 @@ minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 	mb{width, height},
 	vb{mb},
 	cur{point{width / 2, height / 2}, width, height,
-		[this](point p) { vb.click(p); },
-		[this](point p) { vb.toggle_flag(p); }
+		[this](point p) { click(p); },
+		[this](point p) { toggle_flag(p); }
 	}
 {
 	if (width * height <= mine_count) {
@@ -25,7 +25,7 @@ minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 
 void minesweeper::play() {
 	print_board();
-	for (char ch; std::cin >> ch; ) {
+	for (char ch; !game_over_ && std::cin >> ch; ) {
 		control_cursor(ch);
 		print_board();
 	}
@@ -45,6 +45,39 @@ void minesweeper::put_mines(size_t count) {
 		}
 	}
 	vb.update_neighbor_counts();
+}
+
+void minesweeper::control_cursor(char ch) {
+	switch (std::tolower(ch)) {
+	case 'u':
+		cur.move(cursor::up);
+		break;
+	case 'd':
+		cur.move(cursor::down);
+		break;
+	case 'r':
+		cur.move(cursor::right);
+		break;
+	case 'l':
+		cur.move(cursor::left);
+		break;
+	case 'x':
+		cur.click();
+		break;
+	case 'f':
+		cur.alt_click();
+		break;
+	}
+}
+
+void minesweeper::click(point p) {
+	if (vb.click(p) && mb.has_mine(p)) {
+		game_over_ = true;
+	}
+}
+
+void minesweeper::toggle_flag(point p) {
+	vb.toggle_flag(p);
 }
 
 void minesweeper::print_board() const {
@@ -105,27 +138,4 @@ void minesweeper::print_tile(point p) const {
 
 void minesweeper::print_footer() const {
 	print_header();
-}
-
-void minesweeper::control_cursor(char ch) {
-	switch (std::tolower(ch)) {
-	case 'u':
-		cur.move(cursor::up);
-		break;
-	case 'd':
-		cur.move(cursor::down);
-		break;
-	case 'r':
-		cur.move(cursor::right);
-		break;
-	case 'l':
-		cur.move(cursor::left);
-		break;
-	case 'x':
-		cur.click();
-		break;
-	case 'f':
-		cur.alt_click();
-		break;
-	}
 }

@@ -20,15 +20,17 @@ void visual_board::update_neighbor_counts() {
 	}
 }
 
-void visual_board::click(point p) {
+bool visual_board::click(point p) {
 	visual_tile vt = get_tile(p);
-	if (vt.state == visual_tile::clickable) {
-		vt.state = visual_tile::clicked;
-		set_tile(p, vt);
+	if (vt.state != visual_tile::clickable) {
+		return false;
 	}
+	vt.state = visual_tile::clicked;
+	set_tile(p, vt);
+	return true;
 }
 
-void visual_board::toggle_flag(point p) {
+bool visual_board::toggle_flag(point p) {
 	visual_tile vt = get_tile(p);
 	switch (vt.state) {
 	case visual_tile::clickable:
@@ -38,7 +40,9 @@ void visual_board::toggle_flag(point p) {
 		vt.state = visual_tile::clickable;
 		break;
 	default:
+		return false;
 		break;
 	}
 	set_tile(p, vt);
+	return true;
 }
