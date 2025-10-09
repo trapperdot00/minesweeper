@@ -11,7 +11,7 @@
 template <typename tile>
 class board {
 public:
-	board(size_t width, size_t height);
+	board(size_t width, size_t height, tile init);
 
 	size_t size() const;
 	size_t width() const;

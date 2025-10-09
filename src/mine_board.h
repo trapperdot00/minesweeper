@@ -6,7 +6,7 @@
 
 class mine_board : public board<mine_tile> {
 public:
-	using board::board;
+	mine_board(size_t width, size_t height);
 
 	void put_mine(point);
 	void erase_mine(point);
@@ -15,6 +15,7 @@ public:
 	int neighboring_mines(point) const;
 
 	size_t mine_count() const;
+	size_t empty_count() const;
 
 	void debug_print() const;
 private:

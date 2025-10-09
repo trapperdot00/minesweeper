@@ -2,6 +2,10 @@
 
 #include <iostream>
 
+mine_board::mine_board(size_t width, size_t height) :
+	board{width, height, mine_tile::empty}
+{}
+
 void mine_board::put_mine(point p) {
 	if (set_tile(p, mine_tile::mine)) {
 		++mine_count_;
@@ -38,6 +42,10 @@ int mine_board::neighboring_mines(point p) const {
 
 size_t mine_board::mine_count() const {
 	return mine_count_;
+}
+
+size_t mine_board::empty_count() const {
+	return size() - mine_count();
 }
 
 void mine_board::debug_print() const {
