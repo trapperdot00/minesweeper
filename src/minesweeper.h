@@ -16,8 +16,8 @@ public:
 private:
 	void put_mines(size_t count);
 	
-	void click(point);
-	void print() const;
+	void print_board() const;
+	void control_cursor(char);
 
 	mine_board mb;
 	visual_board vb;
