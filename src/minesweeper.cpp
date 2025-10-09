@@ -11,7 +11,7 @@
 minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 	mb{width, height},
 	vb{mb},
-	pos{point{width / 2, height / 2}, width, height, [this](point p) {
+	cur{point{width / 2, height / 2}, width, height, [this](point p) {
 		click(p);
 	}}
 {
@@ -22,29 +22,28 @@ minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 }
 
 void minesweeper::play() {
-	std::cout << "pos: " << pos.pos() << '\n';
+	std::cout << "pos: " << cur.pos() << '\n';
 	print();
 	std::cout << "----------------------\n\n";
 	for (char ch; std::cin >> ch; ) {
-		cursor::direction dir;
 		switch (std::tolower(ch)) {
 		case 'u':
-			pos.move(cursor::up);
+			cur.move(cursor::up);
 			break;
 		case 'd':
-			pos.move(cursor::down);
+			cur.move(cursor::down);
 			break;
 		case 'r':
-			pos.move(cursor::right);
+			cur.move(cursor::right);
 			break;
 		case 'l':
-			pos.move(cursor::left);
+			cur.move(cursor::left);
 			break;
 		case 'x':
-			pos.click();
+			cur.click();
 			break;
 		}
-		std::cout << "\npos: " << pos.pos() << '\n';
+		std::cout << "\npos: " << cur.pos() << '\n';
 		print();
 		std::cout << "----------------------\n\n";
 	}
@@ -75,7 +74,7 @@ void minesweeper::print() const {
 		for (size_t x = 0; x < mb.width(); ++x) {
 			point p{x, y};
 			visual_tile vt = vb.get_tile(p);
-			std::cout << (pos.pos() == p ? '>' : ' ');
+			std::cout << (cur.pos() == p ? '>' : ' ');
 			if (vt.state == visual_tile::clicked) {
 				if (mb.has_mine(p)) {
 					std::cout << '*';

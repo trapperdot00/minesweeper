@@ -21,7 +21,7 @@ private:
 
 	mine_board mb;
 	visual_board vb;
-	cursor pos;
+	cursor cur;
 };
 
 #endif
