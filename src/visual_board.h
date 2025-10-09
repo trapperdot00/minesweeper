@@ -16,6 +16,8 @@ public:
 
 	bool click(point);
 	bool toggle_flag(point);
+
+	size_t clicked_count() const;
 private:
 	const mine_board& mb_;
 };

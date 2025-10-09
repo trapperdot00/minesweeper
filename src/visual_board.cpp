@@ -46,3 +46,17 @@ bool visual_board::toggle_flag(point p) {
 	set_tile(p, vt);
 	return true;
 }
+
+size_t visual_board::clicked_count() const {
+	size_t clicked = 0;
+	for (size_t y = 0; y < height(); ++y) {
+		for (size_t x = 0; x < width(); ++x) {
+			point p{x, y};
+			visual_tile vt = get_tile(p);
+			if (vt.state == visual_tile::clicked) {
+				++clicked;
+			}
+		}
+	}
+	return clicked;
+}

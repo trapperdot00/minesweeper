@@ -71,7 +71,7 @@ void minesweeper::control_cursor(char ch) {
 }
 
 void minesweeper::click(point p) {
-	if (vb.click(p) && mb.has_mine(p)) {
+	if (vb.click(p) && (mb.has_mine(p) || vb.clicked_count() == mb.empty_count())) {
 		game_over_ = true;
 	}
 }
