@@ -13,12 +13,10 @@ public:
 	minesweeper(size_t width, size_t height, size_t mine_count);
 
 	void play();
-
-	void halo(point p) {
-		std::cout << p << " halo\n";
-	}
 private:
 	void put_mines(size_t count);
+
+	void click(point);
 
 	mine_board mb;
 	visual_board vb;

@@ -11,7 +11,7 @@ minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 	mb{width, height},
 	vb{mb},
 	pos{point{width / 2, height / 2}, width, height, [this](point p) {
-		halo(p);
+		click(p);
 	}}
 {
 	if (width * height <= mine_count) {
@@ -61,4 +61,8 @@ void minesweeper::put_mines(size_t count) {
 		}
 	}
 	vb.update_neighbor_counts();
+}
+
+void minesweeper::click(point p) {
+	vb.click(p);
 }
