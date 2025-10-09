@@ -17,10 +17,13 @@ minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 		[this](point p) { toggle_flag(p); }
 	}
 {
-	if (width * height <= mine_count) {
+	if (mine_count == 0) {
+		game_state_ = state::win;
+	} else if (width * height <= mine_count) {
 		throw std::invalid_argument{"no space for mines, game requires at least one empty field"};
+	} else {
+		put_mines(mine_count);
 	}
-	put_mines(mine_count);
 }
 
 void minesweeper::play() {
@@ -81,8 +84,7 @@ void minesweeper::click(point p) {
 	}
 	if (mb.has_mine(p)) {
 		game_state_ = state::lose;
-	}
-	if (vb.clicked_count() == mb.empty_count()) {
+	} else if (vb.clicked_count() == mb.empty_count()) {
 		game_state_ = state::win;
 	}
 }
