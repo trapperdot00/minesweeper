@@ -22,7 +22,6 @@ minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 }
 
 void minesweeper::play() {
-	mb.debug_print();
 	std::cout << "pos: " << pos.pos() << '\n';
 	print();
 	std::cout << "----------------------\n\n";
@@ -45,7 +44,6 @@ void minesweeper::play() {
 			pos.click();
 			break;
 		}
-		mb.debug_print();
 		std::cout << "\npos: " << pos.pos() << '\n';
 		print();
 		std::cout << "----------------------\n\n";

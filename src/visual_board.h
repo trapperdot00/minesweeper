@@ -14,8 +14,6 @@ public:
 
 	void update_neighbor_counts();
 	void click(point);
-
-	void debug_print() const;
 private:
 	const mine_board& mb_;
 };

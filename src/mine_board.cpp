@@ -47,13 +47,3 @@ size_t mine_board::mine_count() const {
 size_t mine_board::empty_count() const {
 	return size() - mine_count();
 }
-
-void mine_board::debug_print() const {
-	for (size_t y = 0; y < height(); ++y) {
-		for (size_t x = 0; x < width(); ++x) {
-			point p{x, y};
-			std::cout << (get_tile(p) == mine_tile::empty ? "O" : "*");
-		}
-		std::cout << '\n';
-	}
-}

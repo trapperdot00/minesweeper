@@ -25,18 +25,3 @@ void visual_board::click(point p) {
 	vt.state = visual_tile::clicked;
 	set_tile(p, vt);
 }
-
-void visual_board::debug_print() const {
-	for (size_t y = 0; y < height(); ++y) {
-		for (size_t x = 0; x < width(); ++x) {
-			point p{x, y};
-			visual_tile vt = get_tile(p);
-			if (vt.state == visual_tile::clicked) {
-				std::cout << vt.neighbor_count;
-			} else {
-				std::cout << "?";
-			}
-		}
-		std::cout << '\n';
-	}
-}

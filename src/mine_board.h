@@ -18,8 +18,6 @@ public:
 
 	size_t mine_count() const;
 	size_t empty_count() const;
-
-	void debug_print() const;
 private:
 	size_t mine_count_ = 0;
 };
