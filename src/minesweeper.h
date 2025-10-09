@@ -13,6 +13,7 @@ public:
 	minesweeper(size_t width, size_t height, size_t mine_count);
 
 	void play();
+	bool game_over() const;
 private:
 	void put_mines(size_t count);
 
@@ -27,11 +28,18 @@ private:
 	void print_tile_separator(point) const;
 	void print_tile(point) const;
 	void print_footer() const;
+	void print_game_over() const;
+
+	enum class state {
+		in_progress,
+		lose,
+		win
+	};
 
 	mine_board mb;
 	visual_board vb;
 	cursor cur;
-	bool game_over_ = false;
+	state game_state_ = state::in_progress;
 };
 
 #endif

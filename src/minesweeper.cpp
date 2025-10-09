@@ -25,10 +25,15 @@ minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 
 void minesweeper::play() {
 	print_board();
-	for (char ch; !game_over_ && std::cin >> ch; ) {
+	for (char ch; !game_over() && std::cin >> ch; ) {
 		control_cursor(ch);
 		print_board();
 	}
+	print_game_over();
+}
+
+bool minesweeper::game_over() const {
+	return game_state_ != state::in_progress;
 }
 
 void minesweeper::put_mines(size_t count) {
@@ -71,8 +76,14 @@ void minesweeper::control_cursor(char ch) {
 }
 
 void minesweeper::click(point p) {
-	if (vb.click(p) && (mb.has_mine(p) || vb.clicked_count() == mb.empty_count())) {
-		game_over_ = true;
+	if (!vb.click(p)) {
+		return;
+	}
+	if (mb.has_mine(p)) {
+		game_state_ = state::lose;
+	}
+	if (vb.clicked_count() == mb.empty_count()) {
+		game_state_ = state::win;
 	}
 }
 
@@ -81,7 +92,7 @@ void minesweeper::toggle_flag(point p) {
 }
 
 void minesweeper::print_board() const {
-	print_cursor_position();
+	//print_cursor_position();
 	print_header();
 	for (size_t row = 0; row < mb.height(); ++row) {
 		print_board_row(row);
@@ -138,4 +149,17 @@ void minesweeper::print_tile(point p) const {
 
 void minesweeper::print_footer() const {
 	print_header();
+}
+
+void minesweeper::print_game_over() const {
+	switch (game_state_) {
+	case state::lose:
+		std::cout << "\nYou lost!\n";
+		break;
+	case state::win:
+		std::cout << "\nHooray, you won!\n";
+		break;
+	default:
+		break;
+	}
 }
