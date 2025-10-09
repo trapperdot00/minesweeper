@@ -30,8 +30,8 @@ int main(int argc, char* argv[]) try {
 		throw usage_error{argv[0]};
 	}
 	minesweeper ms{width, height, mines};
-	board& b = ms.get();
-	b.debug_print();
+	mine_board& mb = ms.get();
+	mb.debug_print();
 } catch (const std::exception& e) {
 	std::cerr << e.what() << '\n';
 }
