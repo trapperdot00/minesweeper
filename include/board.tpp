@@ -27,13 +27,22 @@ size_t board<tile>::height() const {
 }
 
 template <typename tile>
-bool board<tile>::set_tile(point p, tile f) {
+void board<tile>::reset(tile t) {
+	for (size_t y = 0; y < height(); ++y) {
+		for (size_t x = 0; x < width(); ++x) {
+			data[y][x] = t;
+		}
+	}
+}
+
+template <typename tile>
+bool board<tile>::set_tile(point p, tile t) {
 	throw_if_not_in_range(p);
 	tile old = data[p.y][p.x];
-	if (old == f) {
+	if (old == t) {
 		return false;
 	}
-	data[p.y][p.x] = f;
+	data[p.y][p.x] = t;
 	return true;
 }
 

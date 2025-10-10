@@ -15,6 +15,8 @@ public:
 	size_t width() const;
 	size_t height() const;
 
+	void reset(tile);
+
 	bool set_tile(point, tile);
 	tile get_tile(point) const;
 protected:
