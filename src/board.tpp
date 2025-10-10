@@ -1,0 +1,56 @@
+#include "board.h"
+
+template <typename tile>
+board<tile>::board(size_t width, size_t height, tile init) :
+	width_{width},
+	height_{height},
+	data(height, std::vector<tile>(width, init))
+{
+	if (width == 0 || height == 0) {
+		throw std::invalid_argument{"board size must not be 0"};
+	}
+}
+
+template <typename tile>
+size_t board<tile>::size() const {
+	return width() * height();
+}
+
+template <typename tile>
+size_t board<tile>::width() const {
+	return width_;
+}
+
+template <typename tile>
+size_t board<tile>::height() const {
+	return height_;
+}
+
+template <typename tile>
+bool board<tile>::set_tile(point p, tile f) {
+	throw_if_not_in_range(p);
+	tile old = data[p.y][p.x];
+	if (old == f) {
+		return false;
+	}
+	data[p.y][p.x] = f;
+	return true;
+}
+
+template <typename tile>
+tile board<tile>::get_tile(point p) const {
+	throw_if_not_in_range(p);
+	return data[p.y][p.x];
+}
+
+template <typename tile>
+bool board<tile>::is_in_range(point p) const {
+	return p.x < width_ && p.y < height_;
+}
+
+template <typename tile>
+void board<tile>::throw_if_not_in_range(point p) const {
+	if (!is_in_range(p)) {
+		throw std::out_of_range{"Point out-of-range"};
+	}
+}
