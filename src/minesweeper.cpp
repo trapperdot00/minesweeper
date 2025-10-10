@@ -29,8 +29,11 @@ minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 void minesweeper::play() {
 	print_board();
 	for (char ch; !game_over() && std::cin.get(ch); ) {
-		if (ch != '\n') {
-			control_cursor(ch);
+		if (ch == '\n') {
+			continue;
+		}
+		control_cursor(ch);
+		if (std::cin.peek() == '\n') {
 			print_board();
 		}
 	}
