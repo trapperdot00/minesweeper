@@ -6,6 +6,11 @@ mine_board::mine_board(size_t width, size_t height) :
 	board{width, height, mine_tile::empty}
 {}
 
+void mine_board::reset() {
+	board::reset(mine_tile::empty);
+	mine_count_ = 0;
+}
+
 void mine_board::put_mine(point p) {
 	if (set_tile(p, mine_tile::mine)) {
 		++mine_count_;
