@@ -33,6 +33,8 @@ private:
 	void control_cursor(char);
 	void click(point);
 	void toggle_flag(point);
+
+	void try_clear_unflagged_neighbors(point);
 	
 	void print_board() const;
 	void print_header() const;
