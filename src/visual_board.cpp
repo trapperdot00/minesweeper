@@ -4,8 +4,6 @@
 
 visual_board::visual_board(const mine_board& mb) :
 	board{mb.width(), mb.height(), visual_tile{}},
-	clicked_count_{0},
-	flagged_count_{0},
 	mb_{mb}
 {
 	update_neighbor_counts();

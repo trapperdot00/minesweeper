@@ -22,8 +22,8 @@ public:
 	size_t clicked_count() const;
 	size_t flagged_count() const;
 private:
-	size_t clicked_count_;
-	size_t flagged_count_;
+	size_t clicked_count_ = 0;
+	size_t flagged_count_ = 0;
 	const mine_board& mb_;
 };
 
