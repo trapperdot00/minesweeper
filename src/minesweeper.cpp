@@ -33,7 +33,7 @@ void minesweeper::play() {
 			continue;
 		}
 		control_cursor(ch);
-		if (std::cin.peek() == '\n') {
+		if (game_over() || std::cin.peek() == '\n') {
 			print_board();
 		}
 	}
@@ -112,7 +112,6 @@ void minesweeper::toggle_flag(point p) {
 }
 
 void minesweeper::print_board() const {
-	//print_cursor_position();
 	print_header();
 	for (size_t row = 0; row < mb.height(); ++row) {
 		print_board_row(row);
@@ -141,7 +140,11 @@ void minesweeper::print_board_row(size_t row) const {
 }
 
 void minesweeper::print_tile_separator(point p) const {
-	std::cout << (cur.pos() == p ? '>' : ' ');
+	if (!game_over() && cur.pos() == p) {
+		std::cout << '>';
+	} else {
+		std::cout << ' ';
+	}
 }
 
 void minesweeper::print_tile(point p) const {
@@ -157,10 +160,20 @@ void minesweeper::print_tile(point p) const {
 		}
 		break;
 	case visual_tile::flagged:
-		std::cout << 'P';
+		if (game_state() == state::lose) {
+			std::cout << '*';
+		} else {
+			std::cout << 'P';
+		}
 		break;
 	case visual_tile::clickable:
-		std::cout << '#';
+		if (!game_over()) {
+			std::cout << '#';
+		} else if (mb.has_mine(p)) {
+			std::cout << (game_state() == state::win ? 'P' : '*');
+		} else {
+			std::cout << '#';
+		}
 		break;
 	default:
 		break;
