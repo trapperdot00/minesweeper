@@ -25,7 +25,6 @@ int main() {
 			default:
 				break;
 			}
-			ms.reset();
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		}
 		std::cout << "----------------------------\n"
