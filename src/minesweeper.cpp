@@ -123,7 +123,7 @@ void minesweeper::click(point p) {
 		game_state_ = state::lose;
 	} else if (vb.clicked_count() == mb.empty_count()) {
 		game_state_ = state::win;
-	} else {
+	} else if (vb.get_tile(p).state == visual_tile::clicked) {
 		try_clear_unflagged_neighbors(p);
 	}
 }
