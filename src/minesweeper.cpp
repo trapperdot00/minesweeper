@@ -42,6 +42,7 @@ void minesweeper::play() {
 		}
 	}
 	print_game_over();
+	board_empty = false;
 }
 
 void minesweeper::reset() {
