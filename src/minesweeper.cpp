@@ -138,25 +138,18 @@ void minesweeper::try_clear_unflagged_neighbors(point p) {
 	if (vt.neighbor_count == 0 || vt.neighbor_count != vb.flagged_neighbors_count(p)) {
 		return;
 	}
-	const size_t min_y = std::min(p.y - 1, p.y);
-	const size_t max_y = std::min(board_height() - 1, p.y + 1);
-	for (size_t y = min_y; y <= max_y; ++y) {
-		const size_t min_x = std::min(p.x - 1, p.x);
-		const size_t max_x = std::min(board_width() - 1, p.x + 1);
-		for (size_t x = min_x; x <= max_x; ++x) {
-			point neighbor{x, y};
-			visual_tile neighbor_vt = vb.get_tile(neighbor);
-			if (neighbor_vt.state != visual_tile::clickable) {
-				continue;
-			}
-			vb.clear_tile(neighbor);
-			if (mb.has_mine(neighbor)) {
-				game_state_ = state::lose;
-			} else if (vb.clicked_count() == mb.empty_count()) {
-				game_state_ = state::win;
-			}
+	mb.for_each_neighbor_pos(p, [this](point neighbor){
+		visual_tile neighbor_vt = vb.get_tile(neighbor);
+		if (neighbor_vt.state != visual_tile::clickable) {
+			return;
 		}
-	}
+		vb.clear_tile(neighbor);
+		if (mb.has_mine(neighbor)) {
+			game_state_ = state::lose;
+		} else if (vb.clicked_count() == mb.empty_count()) {
+			game_state_ = state::win;
+		}
+	});
 }
 
 void minesweeper::print_board() const {
@@ -215,12 +208,10 @@ void minesweeper::print_tile(point p) const {
 		}
 		break;
 	case visual_tile::clickable:
-		if (!game_over()) {
-			std::cout << '#';
-		} else if (mb.has_mine(p)) {
+		if (game_over() && mb.has_mine(p)) {
 			std::cout << (game_state() == state::win ? 'P' : '*');
-		} else {
-			std::cout << '#';
+		}  else {
+			std::cout << '.';
 		}
 		break;
 	default:

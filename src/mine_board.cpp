@@ -30,18 +30,11 @@ bool mine_board::has_mine(point p) const {
 int mine_board::neighboring_mines(point p) const {
 	throw_if_not_in_range(p);
 	int result = 0;	
-	const size_t start_y = std::min(p.y - 1, p.y);
-	const size_t end_y = std::min(p.y + 1, height() - 1);
-	for (size_t y = start_y; y <= end_y; ++y) {
-		const size_t start_x = std::min(p.x - 1, p.x);
-		const size_t end_x = std::min(p.x + 1, width() - 1);
-		for (size_t x = start_x; x <= end_x; ++x) {
-			point neighbor{x, y};
-			if (neighbor != p && has_mine(neighbor)) {
-				++result;
-			}
+	for_each_neighbor_pos(p, [this, p, &result](point neighbor) {
+		if (neighbor != p && has_mine(neighbor)) {
+			++result;
 		}
-	}
+	});
 	return result;
 }
 

@@ -28,11 +28,9 @@ size_t board<tile>::height() const {
 
 template <typename tile>
 void board<tile>::reset(tile t) {
-	for (size_t y = 0; y < height(); ++y) {
-		for (size_t x = 0; x < width(); ++x) {
-			data[y][x] = t;
-		}
-	}
+	for_each_pos([this, t](point p) {
+		data[p.y][p.x] = t;
+	});
 }
 
 template <typename tile>
@@ -50,6 +48,54 @@ template <typename tile>
 tile board<tile>::get_tile(point p) const {
 	throw_if_not_in_range(p);
 	return data[p.y][p.x];
+}
+
+template <typename tile>
+void board<tile>::for_each_pos(std::function<void (point)> f) const {
+	for (size_t y = 0; y < height(); ++y) {
+		for (size_t x = 0; x < width(); ++x) {
+			point p{x, y};
+			f(p);
+		}
+	}
+}
+
+template <typename tile>
+void board<tile>::for_each_neighbor_pos(point p, std::function<void (point)> f) const {
+	for_each_orthogonal_neighbor_pos(p, f);
+	for_each_diagonal_neighbor_pos(p, f);
+}
+
+template <typename tile>
+void board<tile>::for_each_orthogonal_neighbor_pos(point p, std::function<void (point)> f) const {
+	if (p.x) {
+		f(point{p.x - 1, p.y});
+	}
+	if (p.y) {
+		f(point{p.x, p.y - 1});
+	}
+	if (p.x + 1 < width()) {
+		f(point{p.x + 1, p.y});
+	}
+	if (p.y + 1 < height()) {
+		f(point{p.x, p.y + 1});
+	}
+}
+
+template <typename tile>
+void board<tile>::for_each_diagonal_neighbor_pos(point p, std::function<void (point)> f) const {
+	if (p.x && p.y) {
+		f(point{p.x - 1, p.y - 1});
+	}
+	if (p.x + 1 < width() && p.y) {
+		f(point{p.x + 1, p.y - 1});
+	}
+	if (p.x && p.y + 1 < height()) {
+		f(point{p.x - 1, p.y + 1});
+	}
+	if (p.x + 1 < width() && p.y + 1 < height()) {
+		f(point{p.x + 1, p.y + 1});
+	}
 }
 
 template <typename tile>

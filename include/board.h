@@ -7,6 +7,7 @@
 #include <vector>
 #include <stdexcept>
 #include <algorithm>
+#include <functional>
 
 template <typename tile>
 class board {
@@ -19,6 +20,11 @@ public:
 
 	bool set_tile(point, tile);
 	tile get_tile(point) const;
+
+	void for_each_pos(std::function<void (point)>) const;
+	void for_each_neighbor_pos(point, std::function<void (point)>) const;
+	void for_each_orthogonal_neighbor_pos(point, std::function<void (point)>) const;
+	void for_each_diagonal_neighbor_pos(point, std::function<void (point)>) const;
 protected:
 	board(size_t width, size_t height, tile init);
 
