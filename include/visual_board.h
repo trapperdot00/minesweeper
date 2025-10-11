@@ -18,8 +18,12 @@ public:
 	bool click(point);
 	bool toggle_flag(point);
 
+	size_t clickable_count() const;
 	size_t clicked_count() const;
+	size_t flagged_count() const;
 private:
+	size_t clicked_count_;
+	size_t flagged_count_;
 	const mine_board& mb_;
 };
 
