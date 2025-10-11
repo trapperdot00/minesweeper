@@ -1,6 +1,7 @@
 #include "visual_board.h"
 
 #include <iostream>
+#include <algorithm>
 
 visual_board::visual_board(const mine_board& mb) :
 	board{mb.width(), mb.height(), visual_tile{}},
@@ -29,11 +30,19 @@ void visual_board::update_neighbor_counts() {
 
 bool visual_board::click(point p) {
 	visual_tile vt = get_tile(p);
-	if (vt.state != visual_tile::clickable) {
+	switch (vt.state) {
+	case visual_tile::clickable:
+		clear_tile(p);
+		return true;
+	case visual_tile::clicked:
+		if (vt.neighbor_count && vt.neighbor_count == flagged_neighbors_count(p)) {
+			clear_unflagged_neighbors(p);
+			return true;
+		}
+		return false;
+	default:
 		return false;
 	}
-	clear_tile(p);
-	return true;
 }
 
 bool visual_board::toggle_flag(point p) {
@@ -105,4 +114,34 @@ void visual_board::clear_tile(point p, point* parent) {
 	if (p.x + 1 < width() && p.y + 1 < height()) {
 		clear_tile(point{p.x + 1, p.y + 1}, &p);
 	}
+}
+
+void visual_board::clear_unflagged_neighbors(point p) {
+	const size_t min_y = std::min(p.y - 1, p.y);
+	const size_t max_y = std::min(height() - 1, p.y + 1);
+	for (size_t y = min_y; y <= max_y; ++y) {
+		const size_t min_x = std::min(p.x - 1, p.x);
+		const size_t max_x = std::min(width() - 1, p.x + 1);
+		for (size_t x = min_x; x <= max_x; ++x) {
+			point neighbor{x, y};
+			clear_tile(neighbor, &p);
+		}
+	}
+}
+
+int visual_board::flagged_neighbors_count(point p) const {
+	int neighbors = 0;
+	const size_t min_y = std::min(p.y - 1, p.y);
+	const size_t max_y = std::min(height() - 1, p.y + 1);
+	for (size_t y = min_y; y <= max_y; ++y) {
+		const size_t min_x = std::min(p.x - 1, p.x);
+		const size_t max_x = std::min(width() - 1, p.x + 1);
+		for (size_t x = min_x; x <= max_x; ++x) {
+			point p{x, y};
+			if (get_tile(p).state == visual_tile::flagged) {
+				++neighbors;
+			}
+		}
+	}
+	return neighbors;
 }

@@ -23,6 +23,8 @@ public:
 	size_t flagged_count() const;
 private:
 	void clear_tile(point, point* parent = nullptr);
+	void clear_unflagged_neighbors(point);
+	int flagged_neighbors_count(point) const;
 
 	size_t clicked_count_ = 0;
 	size_t flagged_count_ = 0;
