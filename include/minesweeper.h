@@ -39,10 +39,12 @@ private:
 	void print_footer() const;
 	void print_game_over() const;
 
+	size_t mine_count_ = 0;
 	mine_board mb;
 	visual_board vb;
 	cursor cur;
 	state game_state_ = state::in_progress;
+	bool board_empty = true;
 };
 
 #endif

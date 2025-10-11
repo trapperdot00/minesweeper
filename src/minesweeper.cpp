@@ -10,6 +10,7 @@
 #include <iomanip>
 
 minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
+	mine_count_{mine_count},
 	mb{width, height},
 	vb{mb},
 	cur{point{0, 0}, width, height,
@@ -21,12 +22,15 @@ minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 		throw std::invalid_argument{"game requires at least one mine"};
 	} else if (width * height <= mine_count) {
 		throw std::invalid_argument{"no space for mines, game requires at least one empty field"};
-	} else {
-		put_mines(mine_count);
 	}
 }
 
 void minesweeper::play() {
+	if (!board_empty) {
+		reset();
+	}
+	put_mines(mine_count_);
+	vb.update_neighbor_counts();
 	print_board();
 	for (char ch; !game_over() && std::cin.get(ch); ) {
 		if (ch == '\n') {
@@ -41,12 +45,11 @@ void minesweeper::play() {
 }
 
 void minesweeper::reset() {
-	size_t mines = mb.mine_count();
 	mb.reset();
-	put_mines(mines);
 	vb.reset();
 	cur.move(point{0, 0});
 	game_state_ = state::in_progress;
+	board_empty = true;
 }
 
 bool minesweeper::game_over() const {
