@@ -118,19 +118,24 @@ void minesweeper::click(point p) {
 	if (board_empty) {
 		put_mines(p);
 	}
-	visual_tile vt = vb.get_tile(p);
+	visual_tile old_vt = vb.get_tile(p);
 	vb.click(p);
-	if (vt.state == visual_tile::clickable && mb.has_mine(p)) {
-		game_state_ = state::lose;
-	} else if (vb.clicked_count() == mb.empty_count()) {
-		game_state_ = state::win;
-	} else if (vt.state == visual_tile::clicked) {
+	update_game_state(p, old_vt);
+	if (vb.get_tile(p).state == visual_tile::clicked) {
 		try_clear_unflagged_neighbors(p);
 	}
 }
 
 void minesweeper::toggle_flag(point p) {
 	vb.toggle_flag(p);
+}
+
+void minesweeper::update_game_state(point p, visual_tile old) {
+	if (old.state == visual_tile::clickable && mb.has_mine(p)) {
+		game_state_ = state::lose;
+	} else if (vb.clicked_count() == mb.empty_count()) {
+		game_state_ = state::win;
+	}
 }
 
 void minesweeper::try_clear_unflagged_neighbors(point p) {

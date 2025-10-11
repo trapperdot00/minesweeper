@@ -4,6 +4,8 @@
 #include "mine_board.h"
 #include "visual_board.h"
 #include "cursor.h"
+#include "point.h"
+#include "visual_tile.h"
 
 #include <cstddef>
 #include <iostream>
@@ -34,6 +36,7 @@ private:
 	void click(point);
 	void toggle_flag(point);
 
+	void update_game_state(point, visual_tile old);
 	void try_clear_unflagged_neighbors(point);
 	
 	void print_board() const;
