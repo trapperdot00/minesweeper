@@ -12,7 +12,7 @@
 minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 	mb{width, height},
 	vb{mb},
-	cur{point{width / 2, height / 2}, width, height,
+	cur{point{0, 0}, width, height,
 		[this](point p) { click(p); },
 		[this](point p) { toggle_flag(p); }
 	}
@@ -40,8 +40,21 @@ void minesweeper::play() {
 	print_game_over();
 }
 
+void minesweeper::reset() {
+	size_t mines = mb.mine_count();
+	mb.reset();
+	put_mines(mines);
+	vb.reset();
+	cur.move(point{0, 0});
+	game_state_ = state::in_progress;
+}
+
 bool minesweeper::game_over() const {
 	return game_state_ != state::in_progress;
+}
+
+minesweeper::state minesweeper::game_state() const {
+	return game_state_;
 }
 
 void minesweeper::put_mines(size_t count) {
