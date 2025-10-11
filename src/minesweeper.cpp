@@ -207,7 +207,7 @@ void minesweeper::print_tile(point p) const {
 		}
 		break;
 	case visual_tile::flagged:
-		if (game_state() == state::lose) {
+		if (game_state() == state::lose && mb.has_mine(p)) {
 			std::cout << '*';
 		} else {
 			std::cout << 'P';
