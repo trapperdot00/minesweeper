@@ -20,6 +20,8 @@ public:
 	};
 
 	void move(direction);
+	void move(point);
+
 	void click();
 	void alt_click();
 

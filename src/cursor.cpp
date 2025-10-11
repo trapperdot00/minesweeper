@@ -1,5 +1,7 @@
 #include "cursor.h"
 
+#include <stdexcept>
+
 cursor::cursor(point start, size_t width, size_t height,
 		std::function<void (point)> cb,
 		std::function<void (point)> alt_cb) :
@@ -25,6 +27,13 @@ void cursor::move(direction d) {
 		pos_.x -= (pos_.x) ? 1 : 0;
 		break;
 	}
+}
+
+void cursor::move(point p) {
+	if (p.x >= width() || p.y >= height()) {
+		throw std::out_of_range{"point out-of-range"};
+	}
+	pos_ = p;
 }
 
 void cursor::click() {
