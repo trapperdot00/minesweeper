@@ -12,6 +12,7 @@ class visual_board : public board<visual_tile> {
 public:
 	explicit visual_board(const mine_board& mb);
 
+	void reset();
 	void update_neighbor_counts();
 
 	bool click(point);

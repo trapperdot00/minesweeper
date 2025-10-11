@@ -9,6 +9,11 @@ visual_board::visual_board(const mine_board& mb) :
 	update_neighbor_counts();
 }
 
+void visual_board::reset() {
+	board::reset(visual_tile{});
+	update_neighbor_counts();
+}
+
 void visual_board::update_neighbor_counts() {
 	for (size_t y = 0; y < height(); ++y) {
 		for (size_t x = 0; x < width(); ++x) {
