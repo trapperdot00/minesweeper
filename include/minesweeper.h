@@ -16,6 +16,10 @@ public:
 	void reset();
 
 	bool game_over() const;
+	size_t board_area() const;
+	size_t board_width() const;
+	size_t board_height() const;
+	size_t mine_count() const;
 
 	enum class state {
 		in_progress,
@@ -24,7 +28,7 @@ public:
 	};
 	state game_state() const;
 private:
-	void put_mines(size_t count);
+	void put_mines(point except_to);
 
 	void control_cursor(char);
 	void click(point);

@@ -29,8 +29,6 @@ void minesweeper::play() {
 	if (!board_empty) {
 		reset();
 	}
-	put_mines(mine_count_);
-	vb.update_neighbor_counts();
 	print_board();
 	for (char ch; !game_over() && std::cin.get(ch); ) {
 		if (ch == '\n') {
@@ -42,7 +40,6 @@ void minesweeper::play() {
 		}
 	}
 	print_game_over();
-	board_empty = false;
 }
 
 void minesweeper::reset() {
@@ -57,24 +54,41 @@ bool minesweeper::game_over() const {
 	return game_state_ != state::in_progress;
 }
 
+size_t minesweeper::board_area() const {
+	return board_width() * board_height();
+}
+
+size_t minesweeper::board_width() const {
+	return mb.width();
+}
+
+size_t minesweeper::board_height() const {
+	return mb.height();
+}
+
+size_t minesweeper::mine_count() const {
+	return mine_count_;
+}
+
 minesweeper::state minesweeper::game_state() const {
 	return game_state_;
 }
 
-void minesweeper::put_mines(size_t count) {
+void minesweeper::put_mines(point except_to) {
 	static std::default_random_engine rengine(
 		std::chrono::high_resolution_clock::now().time_since_epoch().count()
 	);
-	static std::uniform_int_distribution<size_t> x_gen(0, mb.width() - 1);
-	static std::uniform_int_distribution<size_t> y_gen(0, mb.height() - 1);
-	while (count) {
+	static std::uniform_int_distribution<size_t> x_gen(0, board_width() - 1);
+	static std::uniform_int_distribution<size_t> y_gen(0, board_height() - 1);
+	for (size_t count = mine_count(); count; ) {
 		point candidate{x_gen(rengine), y_gen(rengine)};
-		if (!mb.has_mine(candidate)) {
+		if (candidate != except_to && !mb.has_mine(candidate)) {
 			mb.put_mine(candidate);
 			--count;
 		}
 	}
 	vb.update_neighbor_counts();
+	board_empty = false;
 }
 
 void minesweeper::control_cursor(char ch) {
@@ -101,6 +115,9 @@ void minesweeper::control_cursor(char ch) {
 }
 
 void minesweeper::click(point p) {
+	if (board_empty) {
+		put_mines(p);
+	}
 	if (!vb.click(p)) {
 		return;
 	}
