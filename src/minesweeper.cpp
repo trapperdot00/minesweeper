@@ -80,7 +80,7 @@ void minesweeper::put_mines(point except_to) {
 	);
 	static std::uniform_int_distribution<size_t> x_gen(0, board_width() - 1);
 	static std::uniform_int_distribution<size_t> y_gen(0, board_height() - 1);
-	for (size_t count = mine_count(); count; ) {
+	for (size_t count = mine_count_; count; ) {
 		point candidate{x_gen(rengine), y_gen(rengine)};
 		if (candidate != except_to && !mb.has_mine(candidate)) {
 			mb.put_mine(candidate);

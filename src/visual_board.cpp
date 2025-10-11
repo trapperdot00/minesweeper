@@ -54,7 +54,7 @@ bool visual_board::toggle_flag(point p) {
 }
 
 size_t visual_board::clickable_count() const {
-	return size() - clicked_count() - flagged_count();
+	return size() - clicked_count_ - flagged_count_;
 }
 
 size_t visual_board::clicked_count() const {

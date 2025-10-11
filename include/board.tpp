@@ -13,7 +13,7 @@ board<tile>::board(size_t width, size_t height, tile init) :
 
 template <typename tile>
 size_t board<tile>::size() const {
-	return width() * height();
+	return width_ * height_;
 }
 
 template <typename tile>

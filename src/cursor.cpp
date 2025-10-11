@@ -3,13 +3,11 @@
 #include <stdexcept>
 
 cursor::cursor(point start, size_t width, size_t height,
-		std::function<void (point)> cb,
-		std::function<void (point)> alt_cb) :
+   			   std::function<void (point)> cb,
+			   std::function<void (point)> alt_cb) :
 	pos_{start},
-	width_{width},
-	height_{height},
-	click_event{cb},
-	alt_click_event{alt_cb}
+	width_{width}, height_{height},
+	click_event{cb}, alt_click_event{alt_cb}
 {}
 
 void cursor::move(direction d) {
@@ -30,7 +28,7 @@ void cursor::move(direction d) {
 }
 
 void cursor::move(point p) {
-	if (p.x >= width() || p.y >= height()) {
+	if (p.x >= width_ || p.y >= height_) {
 		throw std::out_of_range{"point out-of-range"};
 	}
 	pos_ = p;

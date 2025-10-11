@@ -43,5 +43,5 @@ size_t mine_board::mine_count() const {
 }
 
 size_t mine_board::empty_count() const {
-	return size() - mine_count();
+	return size() - mine_count_;
 }
