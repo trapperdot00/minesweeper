@@ -18,7 +18,7 @@ minesweeper::minesweeper(size_t width, size_t height, size_t mine_count) :
 	}
 {
 	if (mine_count == 0) {
-		game_state_ = state::win;
+		throw std::invalid_argument{"game requires at least one mine"};
 	} else if (width * height <= mine_count) {
 		throw std::invalid_argument{"no space for mines, game requires at least one empty field"};
 	} else {
