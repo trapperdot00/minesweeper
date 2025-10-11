@@ -32,9 +32,7 @@ bool visual_board::click(point p) {
 	if (vt.state != visual_tile::clickable) {
 		return false;
 	}
-	vt.state = visual_tile::clicked;
-	set_tile(p, vt);
-	++clicked_count_;
+	clear_tile(p);
 	return true;
 }
 
@@ -67,4 +65,44 @@ size_t visual_board::clicked_count() const {
 
 size_t visual_board::flagged_count() const {
 	return flagged_count_;
+}
+
+void visual_board::clear_tile(point p, point* parent) {
+	visual_tile vt = get_tile(p);
+	if (parent && (mb_.has_mine(p) || vt.state != visual_tile::clickable))
+	{
+		return;
+	}
+	vt.state = visual_tile::clicked;
+	set_tile(p, vt);
+	++clicked_count_;
+	if (vt.neighbor_count) {
+		return;
+	}
+	// Launch orthogonal clearers
+	if (p.x) {
+		clear_tile(point{p.x - 1, p.y}, &p);
+	}
+	if (p.y) {
+		clear_tile(point{p.x, p.y - 1}, &p);
+	}
+	if (p.x + 1 < width()) {
+		clear_tile(point{p.x + 1, p.y}, &p);
+	}
+	if (p.y + 1 < height()) {
+		clear_tile(point{p.x, p.y + 1}, &p);
+	}
+	// Launch diagonal clearers
+	if (p.x && p.y) {
+		clear_tile(point{p.x - 1, p.y - 1}, &p);
+	}
+	if (p.x + 1 < width() && p.y) {
+		clear_tile(point{p.x + 1, p.y - 1}, &p);
+	}
+	if (p.x && p.y + 1 < height()) {
+		clear_tile(point{p.x - 1, p.y + 1}, &p);
+	}
+	if (p.x + 1 < width() && p.y + 1 < height()) {
+		clear_tile(point{p.x + 1, p.y + 1}, &p);
+	}
 }
