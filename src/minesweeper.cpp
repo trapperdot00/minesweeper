@@ -133,26 +133,27 @@ void minesweeper::toggle_flag(point p) {
 	vb.toggle_flag(p);
 }
 
-// TODO!!! UGLY
 void minesweeper::try_clear_unflagged_neighbors(point p) {
 	visual_tile vt = vb.get_tile(p);
-	if (vt.neighbor_count > 0 && vt.neighbor_count == vb.flagged_neighbors_count(p)) {
-		const size_t min_y = std::min(p.y - 1, p.y);
-		const size_t max_y = std::min(board_height() - 1, p.y + 1);
-		for (size_t y = min_y; y <= max_y; ++y) {
-			const size_t min_x = std::min(p.x - 1, p.x);
-			const size_t max_x = std::min(board_width() - 1, p.x + 1);
-			for (size_t x = min_x; x <= max_x; ++x) {
-				point neighbor{x, y};
-				visual_tile neighbor_vt = vb.get_tile(neighbor);
-				if (neighbor_vt.state == visual_tile::clickable) {
-					vb.clear_tile(neighbor);
-					if (mb.has_mine(neighbor)) {
-						game_state_ = state::lose;
-					} else if (vb.clicked_count() == mb.empty_count()) {
-						game_state_ = state::win;
-					}
-				}
+	if (vt.neighbor_count == 0 || vt.neighbor_count != vb.flagged_neighbors_count(p)) {
+		return;
+	}
+	const size_t min_y = std::min(p.y - 1, p.y);
+	const size_t max_y = std::min(board_height() - 1, p.y + 1);
+	for (size_t y = min_y; y <= max_y; ++y) {
+		const size_t min_x = std::min(p.x - 1, p.x);
+		const size_t max_x = std::min(board_width() - 1, p.x + 1);
+		for (size_t x = min_x; x <= max_x; ++x) {
+			point neighbor{x, y};
+			visual_tile neighbor_vt = vb.get_tile(neighbor);
+			if (neighbor_vt.state != visual_tile::clickable) {
+				continue;
+			}
+			vb.clear_tile(neighbor);
+			if (mb.has_mine(neighbor)) {
+				game_state_ = state::lose;
+			} else if (vb.clicked_count() == mb.empty_count()) {
+				game_state_ = state::win;
 			}
 		}
 	}
