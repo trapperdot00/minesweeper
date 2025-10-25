@@ -198,23 +198,23 @@ void minesweeper::print_tile(point p) const {
 	switch (vt.state) {
 	case visual_tile::clicked:
 		if (mb.has_mine(p)) {
-			std::cout << '*';
+			std::cout << "\e[0;31m*\e[0m";
 		} else if (vt.neighbor_count) {
-			std::cout << vt.neighbor_count;
+			std::cout << "\e[0;34m" << vt.neighbor_count << "\e[0m";
 		} else {
 			std::cout << ' ';
 		}
 		break;
 	case visual_tile::flagged:
 		if (game_state() == state::lose && mb.has_mine(p)) {
-			std::cout << '*';
+			std::cout << "\e[0;31m*" << "\e[0m";
 		} else {
-			std::cout << 'P';
+			std::cout << "\e[0;33mP" << "\e[0m";
 		}
 		break;
 	case visual_tile::clickable:
 		if (game_over() && mb.has_mine(p)) {
-			std::cout << (game_state() == state::win ? 'P' : '*');
+			std::cout << (game_state() == state::win ? "\e[0;33mP" : "\e[0;31m*") << "\e[0m";
 		}  else {
 			std::cout << '.';
 		}
